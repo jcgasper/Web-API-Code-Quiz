@@ -1,3 +1,7 @@
+*{
+    font-family: 'Times New Roman', Times, serif;
+}
+
 body{
 background-color: grey;
 
@@ -21,19 +25,45 @@ header h4{
 }
 section button{
     vertical-align: middle;
+    margin: 10px;
+    background-color: cornflowerblue;
+    
+    
+}
+
+.start-button{
+    background-color: cyan;
+    border-radius: 50%;
+    font-size: 50px;
     
     
 }
 
 .container {
-    
-    height: 200px;
-    position: relative;
-    border: 3px solid green;
+    display:none;
+  position: relative;
+  border: 3px solid green;
   }
   
-  .flex-parent {
+  .buttonDiv {
+    /* change to visible in JS*/
     display: flex;
+    
+  }
+  button {
+transition-duration: 0.4s;
+  
+}
+  
+
+.feedback{
+    text-align: center;
+
+
+  }
+  button:hover{
+      background-color: rgb(93, 170, 170);
+
   }
   
   .jc-center {
@@ -42,13 +72,36 @@ section button{
   
   .question-text {
       text-align: center;
+      text-decoration: underline;
+      font-weight: bold;
+      
   }
   
-  /*.center {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }*/ 
+  .highscore-text {
+    text-align: center;
+  }
+  
+  ol {
+    text-align:center;
+    list-style-position:inside;
+  }
+  
+  
+  
+  .endgame-screen {
+    text-align: center;
+    display:none;
+  }
+  
+  
+  
+  .score {
+    display:none;
+    text-align: center;
+  }
+  
+  
+  .timer {
+    display:none;
+  }
+  

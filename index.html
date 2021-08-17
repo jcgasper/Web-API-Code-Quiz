@@ -14,8 +14,9 @@
     
     <button class="start-button">Start!</button>
     
-    <h3>View HighScore Placeholder</h3>
+    <h3 class ="highScore">View HighScore Placeholder</h3>
     
+    <!--add text using JS-->
     <h4 class="timer">Time:</h4>
     
 
@@ -27,24 +28,61 @@
         
         <div class="container">
         
-        <p class="question-text" data-state="hidden">DELETE THIS TEXT</p>
+        <p class="question-text" data-state="hidden"> </p>
         
-        <div class="flex-parent jc-center">
-        <button class= "button-x" data-state="hidden">DELETE THIS TEXT</button>
+        <div class="buttonDiv jc-center">
+        <button class= "button-1" data-state="hidden"></button>
     </div>
         
-        <div class="flex-parent jc-center">
-        <button class= "button-x" data-state="hidden">DELETE THIS TEXT</button>
+        <div class="buttonDiv jc-center">
+        <button class= "button-2" data-state="hidden"></button>
         </div>
-        <div class="flex-parent jc-center">
-        <button class= "button-x" data-state="hidden">DELETE THIS TEXT</button>
+        <div class="buttonDiv jc-center">
+        <button class= "button-3" data-state="hidden"></button>
         </div>
        
-        <div class="flex-parent jc-center">
-        <button class= "button-x" data-state="hidden">DELETE THIS TEXT</button>
+        <div class="buttonDiv jc-center">
+        <button class= "button-4" data-state="hidden"></button>
         </div>
     </div>
+      <p class="feedback"></p>
 
+    </section>
+
+    <section class ="endgame-screen">
+      
+      <h3>End Game! </h3>
+        <!--write textconent using JS-->
+      <p class="endscore"></p>
+    
+    <p>Enter your Initials</p>
+
+    <form>
+      <label for="initials"></label>
+      <input type="text" id="initials" name="initials" value="type here">
+      
+      <input type="submit" value="Submit">
+    </form>
+
+
+  
+    </section>
+
+
+    
+    <section class ="highscore-box">
+      <!--generate header in JS-->
+      
+      <h2 class="highscore-text"></h2>
+    
+      <div class="centerBox">
+      <ol class="score-list">
+        
+        <!--create LI in javascript & display on page-->
+      </ol>
+    </div>
+
+    
     </section>
 
 
@@ -53,7 +91,7 @@
   
   
   <footer>
-      <p>SCORE Placeholder</p>
+      <p class ="score" data-state="hidden">SCORE Placeholder</p>
   </footer>
   
   
