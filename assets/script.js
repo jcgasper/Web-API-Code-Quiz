@@ -9,6 +9,13 @@ var highScore = document.querySelector(".highScore");
 var highScoretxt = document.querySelector(".highscore-text");
 var scoreListEl = document.querySelector(".score-list");
 var endgameScreen = document.querySelector(".endgame-screen");
+//Answer buttons
+var button1 = document.querySelector(".button-1");
+var button2 = document.querySelector(".button-2");
+var button3 = document.querySelector(".button-3");
+var button4 = document.querySelector(".button-4");
+//Array of buttons 
+var buttonArray = [button1, button2, button3, button4,];
 
 
 
@@ -19,13 +26,22 @@ var score;
 var scoreCount;
 var gameEnd = false;
 var questionString;
-
+var win = false;
+var targetEl;
 // ARRAYS
-var questionArray = ["Question one", "Question two", "Question 3", "Question 4", "Question 5"];
+var questionArray = ["Question one", "Question two", "Question 3", "Question 4",];
+console.log(questionArray)
+var questionArray2 = ["Question one", "Question two", "Question 3", "Question 4",];
 var answerArray = ["Test Answer One","Test Answer Two", "Test Answer Three", "Test Answer Four"];
 var randomArray = [];
 var randomAnswers = [];
-
+var simpleArray = [0,1,2,3]
+//wrong answers for each question (going to make at least 5 real questions)
+var wrongAnswers1 = ["Q1 Fake1","Q1 Fake2","Q1 Fake3","Q1 Fake4",];
+var wrongAnswers2 = ["Q2 Fake1","Q2 Fake2","Q2 Fake3","Q2 Fake4",];
+var wrongAnswers3 = ["Q3 Fake1","Q3 Fake2","Q3 Fake3","Q3 Fake4",];
+var wrongAnswers4 = ["Q4 Fake1","Q4 Fake2","Q4 Fake3","Q4 Fake4",];
+var wrongAnswersArray = [wrongAnswers1,wrongAnswers2,wrongAnswers3,wrongAnswers4,];
 // V init function called when page loads
 function init() {
     renderStartpage();
@@ -34,19 +50,12 @@ function init() {
 // start game function is called when start button is clicked.
 function startGame() {
 gameEnd = false;
-timerCount = 5; // change to 60 to make timer a minute
-startButton.disabled = true;
+timerCount = 30; // change to 60 to make timer a minute
 renderQuiz();
 startTimer();
 
 
 }
-
-
-
-
-
-
 
 
 //Startinterval timer
@@ -103,33 +112,118 @@ function renderQuiz() {
 
 }
 
+/*function displayQuiz(num) {
+
+
+} */
+
 
 function runQuiz() {
     
     generateQuestions();
     generateAnswers();
+    runGame();
     
 
 }
 
+//generates random array containing each question - make it so questions will not repeat
 function generateQuestions() {
-    for (let i = 0; i<questionArray.length; i++) {
-        let qIndex = Math.floor(Math.random() *questionArray.length)
-         randomArray[i] = questionArray[qIndex];
+    // shuffles Question Array 
+    randomArray = shuffleArray(questionArray2);
+   
      
-         }
-     console.log(randomArray);
-     questionElement.textContent = randomArray[0];
-     
+      
 
 }
-
+    function shuffleArray(array) {
+        for (let i = array.length -1; i > 0; i--) {
+            let randNum = Math.floor(Math.random() * (i+1));
+            let temp = array[i];
+            array[i] = array[randNum];
+            array[randNum] = temp;
+            
+        }
+        return array;
+    }
+// randomly generates an array containing  answers matching the random question array
 function generateAnswers() {
-// generate answer array to match question array will include each answer in each question prompt
-// for loop that checks each index in RandomArray, then checks each index of Q array to find match
-// take index of matching question, and make generated answer match. do this for each array and you should
-//have matching randomly generate Q and A arrays
+
+for (let i =0; i<questionArray.length; i++) {
+
+    if (randomArray[i] === questionArray[i]) {
+        randomAnswers[i] = answerArray[i]
+        
+    }
+    else {
+        for (let k =0; k<questionArray.length; k++) {
+            if (randomArray[i] === questionArray[k]) {
+                randomAnswers[i] = answerArray[k] }
+                
+            }  
+        }
+    }
 }
+
+
+
+
+function runGame() { 
+        let x = 0
+        let matchNumber
+        for (let i = 0; i<randomArray.length; i++) {
+         while (x<1){
+        
+        let array = shuffleArray(simpleArray);
+        questionElement.textContent = randomArray[i];     
+        buttonArray[array[0]].textContent = randomAnswers[i];
+        
+        matchNumber = matchNum(randomArray[i]);
+        
+        buttonArray[array[1]].textContent = wrongAnswersArray[matchNumber][0];    
+        buttonArray[array[2]].textContent = wrongAnswersArray[matchNumber][1];
+        buttonArray[array[3]].textContent = wrongAnswersArray[matchNumber][2];
+        
+
+        x++;
+        
+        }
+    
+    }
+
+        
+}
+
+function matchNum(array) {
+   console.log(questionArray);
+    let index;
+    if (array ===questionArray[0]) {
+        console.log("match");
+        index = 0;
+        
+    }
+    
+
+    if (array ===questionArray[1]) {
+        console.log("match");
+        index = 1;
+    }
+    
+    if (array ===questionArray[2]) {
+        console.log("match");
+        index = 2;
+    }
+    
+    if (array ===questionArray[3]) {
+        console.log("match");
+        index = 3;
+    }
+return index    
+
+}
+
+
+ 
 
 
 
@@ -139,24 +233,37 @@ startButton.addEventListener("click", startGame);
 // INITILIZING START OF PAGE
 
 
-
 init();
 
+//listers for each button (using 1 class was for each button was not working for me)
+button1.addEventListener("click",function(event) {
+    //returns  textcontent of clicked box    
+    targetEl = event.target.textContent;
+    console.log(targetEl);
+    
+    });
+    
 
+    button2.addEventListener("click",function(event) {
+        //returns  textcontent of clicked box    
+        targetEl = event.target.textContent;
+        console.log(targetEl);
+        
+        });
 
+        button3.addEventListener("click",function(event) {
+            //returns  textcontent of clicked box    
+            targetEl = event.target.textContent;
+            console.log(targetEl);
+            
+            });
 
-//
-
-
-
-
-
-
-
-
-
-
-
+            button4.addEventListener("click",function(event) {
+                //returns  textcontent of clicked box    
+                targetEl = event.target.textContent;
+                console.log(targetEl);
+                
+                });
 
 
 
