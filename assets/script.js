@@ -9,6 +9,7 @@ var highScore = document.querySelector(".highScore");
 var highScoretxt = document.querySelector(".highscore-text");
 var scoreListEl = document.querySelector(".score-list");
 var endgameScreen = document.querySelector(".endgame-screen");
+var feedbackElement = document.querySelector(".feedback");
 //Answer buttons
 var button1 = document.querySelector(".button-1");
 var button2 = document.querySelector(".button-2");
@@ -23,11 +24,13 @@ var buttonArray = [button1, button2, button3, button4,];
 var timer;
 var timerCount;
 var score;
-var scoreCount;
+var scoreCount = 0;
 var gameEnd = false;
 var questionString;
 var win = false;
 var targetEl;
+var answerCheck;
+var runCount = 0;
 // ARRAYS
 var questionArray = ["Question one", "Question two", "Question 3", "Question 4",];
 console.log(questionArray)
@@ -112,10 +115,25 @@ function renderQuiz() {
 
 }
 
-/*function displayQuiz(num) {
+function displayQuiz(i) {
+    
+    
+    let matchNumber;
+    let array = shuffleArray(simpleArray);
+    questionElement.textContent = randomArray[i];     
+    buttonArray[array[0]].textContent = randomAnswers[i];
+    
+    matchNumber = matchNum(randomArray[i]);
+    
+    buttonArray[array[1]].textContent = wrongAnswersArray[matchNumber][0];    
+    buttonArray[array[2]].textContent = wrongAnswersArray[matchNumber][1];
+    buttonArray[array[3]].textContent = wrongAnswersArray[matchNumber][2];
+    
+    let answerVar = randomAnswers[i];
+    
+    checkAnswer(answerVar);
 
-
-} */
+} 
 
 
 function runQuiz() {
@@ -169,30 +187,22 @@ for (let i =0; i<questionArray.length; i++) {
 
 
 function runGame() { 
-        let x = 0
-        let matchNumber
-        for (let i = 0; i<randomArray.length; i++) {
-         while (x<1){
-        
-        let array = shuffleArray(simpleArray);
-        questionElement.textContent = randomArray[i];     
-        buttonArray[array[0]].textContent = randomAnswers[i];
-        
-        matchNumber = matchNum(randomArray[i]);
-        
-        buttonArray[array[1]].textContent = wrongAnswersArray[matchNumber][0];    
-        buttonArray[array[2]].textContent = wrongAnswersArray[matchNumber][1];
-        buttonArray[array[3]].textContent = wrongAnswersArray[matchNumber][2];
-        
+    if (runCount >= randomArray.length) {
+        runCount = 0;
+    }  
+    displayQuiz(runCount);
 
-        x++;
-        
-        }
     
-    }
 
-        
+      
 }
+
+function checkAnswer(question) {
+    answerCheck = question;
+    console.log("answer chk " + answerCheck);
+
+}
+
 
 function matchNum(array) {
    console.log(questionArray);
@@ -222,8 +232,13 @@ return index
 
 }
 
+function scoreFunc() {
+    scoreCount++;
+    scoreElement.textContent = "Score: " +scoreCount;
+    feedbackElement.textContent ="Correct! ⭐"
 
- 
+}
+
 
 
 
@@ -239,7 +254,13 @@ init();
 button1.addEventListener("click",function(event) {
     //returns  textcontent of clicked box    
     targetEl = event.target.textContent;
-    console.log(targetEl);
+    if (targetEl === answerCheck) {
+        scoreFunc();
+        console.log("SCORE");
+        runCount++;
+            runGame();
+    }
+    
     
     });
     
@@ -247,23 +268,45 @@ button1.addEventListener("click",function(event) {
     button2.addEventListener("click",function(event) {
         //returns  textcontent of clicked box    
         targetEl = event.target.textContent;
-        console.log(targetEl);
+        if (targetEl === answerCheck) {
+            scoreFunc();
+            console.log("SCORE");
+            runCount++;
+            runGame();
+        }
+        if (targetEl != answerCheck) {
+            feedbackElement.textContent = "Wrong!";
+        }
         
-        });
+    });
 
         button3.addEventListener("click",function(event) {
             //returns  textcontent of clicked box    
             targetEl = event.target.textContent;
-            console.log(targetEl);
-            
-            });
+            if (targetEl === answerCheck) {
+                scoreFunc();
+                console.log("SCORE");
+                runCount++;
+            runGame();
+            }
+            if (targetEl != answerCheck) {
+                feedbackElement.textContent = "Wrong!";
+            }    
+        });
 
             button4.addEventListener("click",function(event) {
                 //returns  textcontent of clicked box    
                 targetEl = event.target.textContent;
-                console.log(targetEl);
-                
-                });
+                if (targetEl === answerCheck) {
+                    scoreFunc();
+                    console.log("SCORE");
+                    runCount++;
+            runGame();
+                }
+                if (targetEl != answerCheck) {
+                    feedbackElement.textContent = "Wrong!";
+                }    
+            });
 
 
 
