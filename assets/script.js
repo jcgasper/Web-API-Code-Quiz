@@ -35,21 +35,23 @@ var answerCheck;
 var runCount = 0;
 var userName;
 // ARRAYS
-var questionArray = ["Question one", "Question two", "Question 3", "Question 4",];
-console.log(questionArray)
-var questionArray2 = ["Question one", "Question two", "Question 3", "Question 4",];
-var answerArray = ["Test Answer One","Test Answer Two", "Test Answer Three", "Test Answer Four"];
+
 var randomArray = [];
 var randomAnswers = [];
 var simpleArray = [0,1,2,3]
 var scoreArrayObject = [];
 //wrong answers for each question (going to make at least 5 real questions)
 
+//overcomplicated varibles, consider re-writing using objects
+var questionArray = ["Question one", "Question two", "Question 3", "Question 4",];
+var questionArray2 = ["Question one", "Question two", "Question 3", "Question 4",];
+var answerArray = ["Test Answer One","Test Answer Two", "Test Answer Three", "Test Answer Four"];
 var wrongAnswers1 = ["Q1 Fake1","Q1 Fake2","Q1 Fake3","Q1 Fake4",];
 var wrongAnswers2 = ["Q2 Fake1","Q2 Fake2","Q2 Fake3","Q2 Fake4",];
 var wrongAnswers3 = ["Q3 Fake1","Q3 Fake2","Q3 Fake3","Q3 Fake4",];
 var wrongAnswers4 = ["Q4 Fake1","Q4 Fake2","Q4 Fake3","Q4 Fake4",];
 var wrongAnswersArray = [wrongAnswers1,wrongAnswers2,wrongAnswers3,wrongAnswers4,];
+var inputArray;
 
 // V init function called when page loads
 function init() {
@@ -71,7 +73,7 @@ function renderStartpage () {
 
 function startGame() {
 gameEnd = false;
-timerCount = 5; // change to 60 to make timer a minute
+timerCount = 2; // change to 60 to make timer a minute
 renderQuiz();
 startTimer();
 
@@ -95,7 +97,7 @@ function startTimer() {
     timer = setInterval(function() {
     timerCount--;
     
-    console.log(timerCount)
+    
     
     timerElement.textContent = "Timer: " + timerCount;
     
@@ -119,7 +121,7 @@ function endGame() {
     
     endgameScreen.setAttribute("style","display:inherit;"); //display end score screen
     containerEl.setAttribute("style","display:none;"); //hide question box
-    
+    //hide Wrong/correct, timer, and reset button
 
     }
 
@@ -134,7 +136,7 @@ function runQuiz() {
 
 //generates random array containing each question - make it so questions will not repeat
 function generateQuestions() {
-    // shuffles Question Array 
+    // shuffles Question Array  
     randomArray = shuffleArray(questionArray2);
    
 }
@@ -157,7 +159,9 @@ function generateAnswers() {
                 }  
             }
         }
+    
     }
+
 
 function runGame() { 
     if (runCount >= randomArray.length) {
@@ -190,7 +194,7 @@ function matchQuestions(i) {
 
 function checkAnswer(question) {
     answerCheck = question;
-    console.log("answer chk " + answerCheck);
+    
 
 }
     //shuffles inputted array
@@ -207,27 +211,27 @@ function checkAnswer(question) {
 
 
     function matchNum(array) {
-   console.log(questionArray);
+   
     let index;
     if (array ===questionArray[0]) {
-        console.log("match");
+        
         index = 0;
         
     }
     
 
     if (array ===questionArray[1]) {
-        console.log("match");
+        
         index = 1;
     }
     
     if (array ===questionArray[2]) {
-        console.log("match");
+        
         index = 2;
     }
     
     if (array ===questionArray[3]) {
-        console.log("match");
+        
         index = 3;
     }
 return index    
@@ -243,8 +247,40 @@ function scoreFunc() {
 }
 
 
+function highScoreScreen() {
+    endgameScreen.setAttribute("style","display:none;");
+    timerElement.setAttribute("style","display:none;");
+    scoreElement.setAttribute("style","display:none;");
+    //hide wrong!/correct 
+    highScoretxt.textContent = "Highscores!";
+
+    //convert obj to array to sort?
+    console.log(scoreArrayObject[0].score + scoreArrayObject[0].score);
+    
+    //sorts array object so that high scores are listeed first in array
+    scoreArrayObject.sort(function(a,b) {
+
+        return b.score - a.score;
+    });
+    
+    console.log(scoreArrayObject);
+
+   
+    
+    for (let i = 0; i<scoreArrayObject.length; i++) {
+    createList = document.createElement("li");
+    createList.textContent = scoreArrayObject[i].name +" Score: " + scoreArrayObject[i].score;
+    scoreListEl.appendChild(createList);
+    
+    } 
 
 
+
+
+
+
+
+}
 
 
 
@@ -264,7 +300,7 @@ function inputScore(event) {
     event.preventDefault();
     let userInput = formElement.value;
     let inputScore = scoreCount;
-    console.log(userName + " " + scoreCount);
+    
     var highScoreObj = {name: "", score: 0};
     highScoreObj.name = userInput;
     highScoreObj.score = inputScore;
@@ -279,8 +315,11 @@ function inputScore(event) {
         localStorage.setItem("high-scores", JSON.stringify(scoreArrayObject));
     }
     //load high score screen function
-    console.log(scoreArrayObject);
+    highScoreScreen();
+
+    
 }
+
 
 //listers for each button (using 1 class was for each button was not working for me)
 button1.addEventListener("click",function(event) {
@@ -288,7 +327,7 @@ button1.addEventListener("click",function(event) {
     targetEl = event.target.textContent;
     if (targetEl === answerCheck) {
         scoreFunc();
-        console.log("SCORE");
+        
         runCount++;
             runGame();
     }
@@ -302,7 +341,7 @@ button1.addEventListener("click",function(event) {
         targetEl = event.target.textContent;
         if (targetEl === answerCheck) {
             scoreFunc();
-            console.log("SCORE");
+            
             runCount++;
             runGame();
         }
@@ -317,7 +356,7 @@ button1.addEventListener("click",function(event) {
             targetEl = event.target.textContent;
             if (targetEl === answerCheck) {
                 scoreFunc();
-                console.log("SCORE");
+                
                 runCount++;
             runGame();
             }
@@ -331,7 +370,7 @@ button1.addEventListener("click",function(event) {
             targetEl = event.target.textContent;
                 if (targetEl === answerCheck) {
                     scoreFunc();
-                    console.log("SCORE");
+                    
                     runCount++;
             runGame();
                 }
