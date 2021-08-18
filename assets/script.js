@@ -44,6 +44,7 @@ var randomArray = [];
 var randomAnswers = [];
 var simpleArray = [0,1,2,3]
 var scoreArrayObject = [];
+var localSessionArray = [];
 //wrong answers for each question (going to make at least 5 real questions)
 
 //overcomplicated varibles, consider re-writing using objects
@@ -68,6 +69,9 @@ function renderStartpage () {
     containerEl.setAttribute("style","display:none;");
     scoreElement.setAttribute("style","display:none;");
     timerElement.setAttribute("style","display:none;");
+    displayButtons.setAttribute("style","display:none");
+    startButton.setAttribute("style","display:flex;");
+    highScore.setAttribute("style","display:inherit;");
     feedbackElement.textContent ="";
     
     //display hidden elements
@@ -266,14 +270,19 @@ function resetScore() {
 
 
 function highScoreScreen() {
+    startButton.setAttribute("style","display:none;"); 
+    highScore.setAttribute("style","display:none;"); // hides highscore button
     displayButtons.setAttribute("style","display:inherit;");
     endgameScreen.setAttribute("style","display:none;");
     timerElement.setAttribute("style","display:none;");
     scoreElement.setAttribute("style","display:none;");
     //hide wrong!/correct 
     highScoretxt.textContent = "Highscores!";
-
+    console.log(scoreArrayObject);
     
+    if (scoreArrayObject.length == 0) {
+        scoreArrayObject = JSON.parse(localStorage.getItem("high-scores"));
+    }
     
     //sorts array object so that high scores are listeed first in array
     scoreArrayObject.sort(function(a,b) {
@@ -281,8 +290,7 @@ function highScoreScreen() {
         return b.score - a.score;
     });
     
-    console.log(scoreArrayObject);
-
+    
    
     
     for (let i = 0; i<scoreArrayObject.length; i++) {
@@ -304,8 +312,8 @@ function clearHighscore() {
 function playAgainFunc() {
     highScoretxt.textContent = "";
     scoreListEl.textContent = "";
-    
-    startGame();
+    renderStartpage();
+    //startGame();
 }
 
 

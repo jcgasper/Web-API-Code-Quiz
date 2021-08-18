@@ -9,7 +9,7 @@ background-color: grey;
 
 header {
     text-align: center;
-    position: relative;
+   
 }
 header h3 {
     position: absolute;
@@ -37,6 +37,14 @@ section button{
     font-size: 50px;
     
     
+    
+    
+}
+.center-start {
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -116,3 +124,4 @@ font-size: 55px;
   text-align: center;
   display:none;
 }
+
