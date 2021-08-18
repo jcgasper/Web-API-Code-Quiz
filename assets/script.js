@@ -12,6 +12,10 @@ var endgameScreen = document.querySelector(".endgame-screen");
 var feedbackElement = document.querySelector(".feedback");
 var formElement = document.querySelector(".form-input");
 var formButton = document.querySelector(".input-form")
+var resetButton = document.querySelector(".reset-score");
+var playAgain = document.querySelector(".play-again");
+var displayButtons = document.querySelector(".end-buttons");
+var highscoreDiv = document.getElementsByName(".highscore-box");
 //Answer buttons
 var button1 = document.querySelector(".button-1");
 var button2 = document.querySelector(".button-2");
@@ -64,7 +68,7 @@ function renderStartpage () {
     containerEl.setAttribute("style","display:none;");
     scoreElement.setAttribute("style","display:none;");
     timerElement.setAttribute("style","display:none;");
-    
+    feedbackElement.textContent ="";
     
     //display hidden elements
 
@@ -73,7 +77,8 @@ function renderStartpage () {
 
 function startGame() {
 gameEnd = false;
-timerCount = 2; // change to 60 to make timer a minute
+resetScore();
+timerCount = 5; // change to 60 to make timer a minute
 renderQuiz();
 startTimer();
 
@@ -87,7 +92,10 @@ function renderQuiz() {
     timerElement.setAttribute("style","display:inherit;"); // display timer
     startButton.setAttribute("style","display:none;");     // hide start button
     highScore.setAttribute("style","display:none;"); // hides highscore button
-
+    displayButtons.setAttribute("style","display:none");
+    feedbackElement.textContent ="";
+    
+    
 }
 
 
@@ -118,7 +126,7 @@ function endGame() {
     }
     
     function scoreScreen() {
-    
+    feedbackElement.textContent ="";
     endgameScreen.setAttribute("style","display:inherit;"); //display end score screen
     containerEl.setAttribute("style","display:none;"); //hide question box
     //hide Wrong/correct, timer, and reset button
@@ -246,16 +254,26 @@ function scoreFunc() {
 
 }
 
+function resetScore() {
+    if (scoreCount != 0) {
+        scoreCount = 0;
+        scoreElement.textContent = "";
+    }
+    else {
+        return;
+    }
+}
+
 
 function highScoreScreen() {
+    displayButtons.setAttribute("style","display:inherit;");
     endgameScreen.setAttribute("style","display:none;");
     timerElement.setAttribute("style","display:none;");
     scoreElement.setAttribute("style","display:none;");
     //hide wrong!/correct 
     highScoretxt.textContent = "Highscores!";
 
-    //convert obj to array to sort?
-    console.log(scoreArrayObject[0].score + scoreArrayObject[0].score);
+    
     
     //sorts array object so that high scores are listeed first in array
     scoreArrayObject.sort(function(a,b) {
@@ -274,16 +292,21 @@ function highScoreScreen() {
     
     } 
 
-
-
-
-
-
-
 }
 
 
+function clearHighscore() {
+    localStorage.clear();
+    scoreListEl.textContent = "";
 
+}
+
+function playAgainFunc() {
+    highScoretxt.textContent = "";
+    scoreListEl.textContent = "";
+    
+    startGame();
+}
 
 
 // INITILIZING START OF PAGE
@@ -291,10 +314,11 @@ init();
 //start button event listener
 startButton.addEventListener("click", startGame);
 
-
-
+resetButton.addEventListener("click", clearHighscore);
+playAgain.addEventListener("click", playAgainFunc);
 
 formButton.addEventListener("submit",inputScore);
+highScore.addEventListener("click",highScoreScreen)
 
 function inputScore(event) {
     event.preventDefault();
