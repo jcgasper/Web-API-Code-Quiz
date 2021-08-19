@@ -82,7 +82,7 @@ function renderStartpage () {
 function startGame() {
 gameEnd = false;
 resetScore();
-timerCount = 5; // change to 60 to make timer a minute
+timerCount = 25; // change to 60 to make timer a minute
 renderQuiz();
 startTimer();
 
@@ -177,10 +177,11 @@ function generateAnswers() {
 
 function runGame() { 
     if (runCount >= randomArray.length) {
-        runCount = 0;
-    }  
+        endGame();
+    }
+    else {  
     matchQuestions(runCount);
-
+    }
 }
 
 function matchQuestions(i) {
