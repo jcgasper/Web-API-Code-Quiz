@@ -46,8 +46,17 @@ var simpleArray = [0,1,2,3]
 var scoreArrayObject = [];
 var localSessionArray = [];
 //wrong answers for each question (going to make at least 5 real questions)
+//object to replace the billion question arrays
+QuestionObj1 = {Question: "q1", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
+QuestionObj2 = {Question: "q2", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
+QuestionObj3 = {Question: "q3", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
+QuestionObj4 = {Question: "q4", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
+QuestionObj5 = {Question: "q5", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
 
-//overcomplicated varibles, consider re-writing using objects
+objectArray = [QuestionObj1,QuestionObj2,QuestionObj3,QuestionObj4,QuestionObj5];
+
+
+//overcomplicated varibles, consider re-writing using objects, add more questions
 var questionArray = ["Question one", "Question two", "Question 3", "Question 4",];
 var questionArray2 = ["Question one", "Question two", "Question 3", "Question 4",];
 var answerArray = ["Test Answer One","Test Answer Two", "Test Answer Three", "Test Answer Four"];
@@ -61,55 +70,47 @@ var inputArray;
 // V init function called when page loads
 function init() {
     renderStartpage();
-    
-} 
+    } 
 
-function renderStartpage () {
-    //hide page elements except for start button, and highscore page button
-    containerEl.setAttribute("style","display:none;");
-    scoreElement.setAttribute("style","display:none;");
-    timerElement.setAttribute("style","display:none;");
-    displayButtons.setAttribute("style","display:none");
-    startButton.setAttribute("style","display:flex;");
-    highScore.setAttribute("style","display:inherit;");
-    feedbackElement.textContent ="";
-    
-    //display hidden elements
 
-}
 // start game function is called when start button is clicked.
-
 function startGame() {
 gameEnd = false;
 resetScore();
-timerCount = 25; // change to 60 to make timer a minute
+
 renderQuiz();
 startTimer();
 
 
 }
-
-function renderQuiz() {
-    //Render quizbox & related elements, hide non-related elements
-    containerEl.setAttribute("style","display:inherit;"); //display quizbox
-    scoreElement.setAttribute("style","display:inherit;"); //display score
-    timerElement.setAttribute("style","display:inherit;"); // display timer
-    startButton.setAttribute("style","display:none;");     // hide start button
-    highScore.setAttribute("style","display:none;"); // hides highscore button
-    displayButtons.setAttribute("style","display:none");
-    feedbackElement.textContent ="";
+//endgame function runs when time runs out, or all questions have been answered
+function endGame() {
+    gameEnd = true;
+    renderScoreScreen();
+    // run function creating end score screen
+    }
     
+    //quiz function is ran when timer has beeen started
+    function runQuiz() {
+        generateQuestions();
+        generateAnswers();
+        runGame();
+    }
     
-}
+    function runGame() { 
+        if (runCount >= randomArray.length) {
+            endGame();
+        }
+        else {  
+        matchQuestions(runCount);
+        }
+    }
 
-
-//Startinterval timer
+//Startinterval timer runs whens start button is pressed
 function startTimer() {
-    
+    timerCount = 60; // change to 60 to make timer a minute
     timer = setInterval(function() {
     timerCount--;
-    
-    
     
     timerElement.textContent = "Timer: " + timerCount;
     
@@ -123,28 +124,6 @@ function startTimer() {
     runQuiz();
 }
 
-function endGame() {
-    gameEnd = true;
-    scoreScreen();
-    // run function creating end score screen
-    }
-    
-    function scoreScreen() {
-    feedbackElement.textContent ="";
-    endgameScreen.setAttribute("style","display:inherit;"); //display end score screen
-    containerEl.setAttribute("style","display:none;"); //hide question box
-    //hide Wrong/correct, timer, and reset button
-
-    }
-
-function runQuiz() {
-    
-    generateQuestions();
-    generateAnswers();
-    runGame();
-    
-
-}
 
 //generates random array containing each question - make it so questions will not repeat
 function generateQuestions() {
@@ -175,14 +154,7 @@ function generateAnswers() {
     }
 
 
-function runGame() { 
-    if (runCount >= randomArray.length) {
-        endGame();
-    }
-    else {  
-    matchQuestions(runCount);
-    }
-}
+
 
 function matchQuestions(i) {
     
@@ -210,20 +182,7 @@ function checkAnswer(question) {
     
 
 }
-    //shuffles inputted array
-    function shuffleArray(array) {
-        for (let i = array.length -1; i > 0; i--) {
-            let randNum = Math.floor(Math.random() * (i+1));
-            let temp = array[i];
-            array[i] = array[randNum];
-            array[randNum] = temp;
-            
-        }
-        return array;
-    }
-
-
-    function matchNum(array) {
+function matchNum(array) {
    
     let index;
     if (array ===questionArray[0]) {
@@ -252,6 +211,23 @@ return index
 }
 
 
+
+    
+    //shuffles inputted array
+    function shuffleArray(array) {
+        for (let i = array.length -1; i > 0; i--) {
+            let randNum = Math.floor(Math.random() * (i+1));
+            let temp = array[i];
+            array[i] = array[randNum];
+            array[randNum] = temp;
+            
+        }
+        return array;
+    }
+
+
+    
+
 function scoreFunc() {
     scoreCount++;
     scoreElement.textContent = "Score: " +scoreCount;
@@ -271,15 +247,7 @@ function resetScore() {
 
 
 function highScoreScreen() {
-    startButton.setAttribute("style","display:none;"); 
-    highScore.setAttribute("style","display:none;"); // hides highscore button
-    displayButtons.setAttribute("style","display:inherit;");
-    endgameScreen.setAttribute("style","display:none;");
-    timerElement.setAttribute("style","display:none;");
-    scoreElement.setAttribute("style","display:none;");
-    //hide wrong!/correct 
-    highScoretxt.textContent = "Highscores!";
-    console.log(scoreArrayObject);
+    renderhighScore();
     
     if (scoreArrayObject.length == 0) {
         scoreArrayObject = JSON.parse(localStorage.getItem("high-scores"));
@@ -287,12 +255,8 @@ function highScoreScreen() {
     
     //sorts array object so that high scores are listeed first in array
     scoreArrayObject.sort(function(a,b) {
-
         return b.score - a.score;
     });
-    
-    
-   
     
     for (let i = 0; i<scoreArrayObject.length; i++) {
     createList = document.createElement("li");
@@ -300,7 +264,6 @@ function highScoreScreen() {
     scoreListEl.appendChild(createList);
     
     } 
-
 }
 
 
@@ -316,18 +279,6 @@ function playAgainFunc() {
     renderStartpage();
     //startGame();
 }
-
-
-// INITILIZING START OF PAGE
-init();
-//start button event listener
-startButton.addEventListener("click", startGame);
-
-resetButton.addEventListener("click", clearHighscore);
-playAgain.addEventListener("click", playAgainFunc);
-
-formButton.addEventListener("submit",inputScore);
-highScore.addEventListener("click",highScoreScreen)
 
 function inputScore(event) {
     event.preventDefault();
@@ -349,10 +300,63 @@ function inputScore(event) {
     }
     //load high score screen function
     highScoreScreen();
+}
+//page rendering - section of functions that control displayed elements
+function renderStartpage () {
+    //hide page elements except for start button, and highscore page button
+    containerEl.setAttribute("style","display:none;");
+    scoreElement.setAttribute("style","display:none;");
+    timerElement.setAttribute("style","display:none;");
+    displayButtons.setAttribute("style","display:none");
+    feedbackElement.textContent ="";
+    //display possibly hidden elements
+    highScore.setAttribute("style","display:inherit;");
+    startButton.setAttribute("style","display:flex;");
+}
 
+function renderQuiz() {
+    //Render quizbox & related elements, hide non-related elements
+    containerEl.setAttribute("style","display:inherit;"); //display quizbox
+    scoreElement.setAttribute("style","display:inherit;"); //display score
+    timerElement.setAttribute("style","display:inherit;"); // display timer
+    startButton.setAttribute("style","display:none;");     // hide start button
+    highScore.setAttribute("style","display:none;"); // hides highscore button
+    displayButtons.setAttribute("style","display:none");
+    feedbackElement.textContent ="";
+    
     
 }
 
+function renderhighScore() {
+    startButton.setAttribute("style","display:none;"); 
+    highScore.setAttribute("style","display:none;"); // hides highscore button
+    displayButtons.setAttribute("style","display:inherit;");
+    endgameScreen.setAttribute("style","display:none;");
+    timerElement.setAttribute("style","display:none;");
+    scoreElement.setAttribute("style","display:none;");
+    //hide wrong!/correct 
+    highScoretxt.textContent = "Highscores!";
+
+}
+function renderScoreScreen() {
+    feedbackElement.textContent ="";
+    endgameScreen.setAttribute("style","display:inherit;"); //display end score screen
+    containerEl.setAttribute("style","display:none;"); //hide question box
+    //hide Wrong/correct, timer, and reset button
+
+    }
+
+//page buttons event listeners
+// start button - start game
+startButton.addEventListener("click", startGame);
+//reset score button
+resetButton.addEventListener("click", clearHighscore);
+//play again button
+playAgain.addEventListener("click", playAgainFunc);
+//form submit button
+formButton.addEventListener("submit",inputScore);
+//view highscore button
+highScore.addEventListener("click",highScoreScreen)
 
 //listers for each button (using 1 class was for each button was not working for me)
 button1.addEventListener("click",function(event) {
@@ -364,7 +368,10 @@ button1.addEventListener("click",function(event) {
         runCount++;
             runGame();
     }
-    
+    else {
+        feedbackElement.textContent = "Wrong!";
+        timerCount--;
+    }
     
     });
     
@@ -378,36 +385,41 @@ button1.addEventListener("click",function(event) {
             runCount++;
             runGame();
         }
-        if (targetEl != answerCheck) {
+        else {
             feedbackElement.textContent = "Wrong!";
+            timerCount--;
         }
         
     });
 
-    button3.addEventListener("click",function(event) {
-            //returns  textcontent of clicked box    
-            targetEl = event.target.textContent;
-            if (targetEl === answerCheck) {
-                scoreFunc();
+button3.addEventListener("click",function(event) {
+    //returns  textcontent of clicked box    
+    targetEl = event.target.textContent;
+    if (targetEl === answerCheck) {
+        scoreFunc();
                 
-                runCount++;
-            runGame();
-            }
-            if (targetEl != answerCheck) {
-                feedbackElement.textContent = "Wrong!";
+        runCount++;
+        runGame();
+    }
+        else{
+        feedbackElement.textContent = "Wrong!";
+            timerCount--;
             }    
         });
 
-    button4.addEventListener("click",function(event) {
-            //returns  textcontent of clicked box    
-            targetEl = event.target.textContent;
-                if (targetEl === answerCheck) {
-                    scoreFunc();
-                    
-                    runCount++;
-            runGame();
+button4.addEventListener("click",function(event) {
+        //returns  textcontent of clicked box    
+        targetEl = event.target.textContent;
+            if (targetEl === answerCheck) {
+                scoreFunc();
+                runCount++;
+                 runGame();
                 }
-                if (targetEl != answerCheck) {
+                else {
                     feedbackElement.textContent = "Wrong!";
+                    timerCount--;
                 }    
             });
+
+// INITILIZING START OF PAGE
+init();
