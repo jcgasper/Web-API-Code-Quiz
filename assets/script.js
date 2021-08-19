@@ -2,7 +2,6 @@
 var questionElement = document.querySelector(".question-text");
 var scoreElement = document.querySelector(".score");
 var startButton = document.querySelector(".start-button");
-var qButtonElement = document.querySelector(".buttonDiv");
 var containerEl = document.querySelector(".container");
 var timerElement = document.querySelector(".timer");
 var highScore = document.querySelector(".highScore");
@@ -15,7 +14,6 @@ var formButton = document.querySelector(".input-form")
 var resetButton = document.querySelector(".reset-score");
 var playAgain = document.querySelector(".play-again");
 var displayButtons = document.querySelector(".end-buttons");
-var highscoreDiv = document.getElementsByName(".highscore-box");
 //Answer buttons
 var button1 = document.querySelector(".button-1");
 var button2 = document.querySelector(".button-2");
@@ -24,48 +22,39 @@ var button4 = document.querySelector(".button-4");
 //Array of buttons 
 var buttonArray = [button1, button2, button3, button4,];
 
-
-
 // DECLARE VARIABLES
 var timer;
 var timerCount;
 var score;
 var scoreCount = 0;
-var gameEnd = false;
+var gameEnd = false; 
 var questionString;
-var win = false;
 var targetEl;
 var answerCheck;
-var runCount = 0;
+var runCount;
 var userName;
 // ARRAYS
 
-var randomArray = [];
-var randomAnswers = [];
-var simpleArray = [0,1,2,3]
+//local storage/highscore arrays
 var scoreArrayObject = [];
 var localSessionArray = [];
-//wrong answers for each question (going to make at least 5 real questions)
-//object to replace the billion question arrays
-QuestionObj1 = {Question: "q1", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
-QuestionObj2 = {Question: "q2", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
-QuestionObj3 = {Question: "q3", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
-QuestionObj4 = {Question: "q4", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
-QuestionObj5 = {Question: "q5", answers: ["a1","a2","a3","a4"], correctAnswer: "a1"};
 
-objectArray = [QuestionObj1,QuestionObj2,QuestionObj3,QuestionObj4,QuestionObj5];
+//question objects complete question list, at least 10
+QuestionObj1 = {Question: "How is Javascript related to Java?", answers: ["There is no relation between the two","Javascript is built with Java","Java is built with Javascript","Javascript & Java are owned by the same company"], correctAnswer: "There is no relation between the two"};
+QuestionObj2 = {Question: "Which description best fits Javascript?", answers: ["Programming Language","Scripting Language","Server Query Language","Cascading Style Sheets"], correctAnswer: "Scripting Language"};
+QuestionObj3 = {Question: "Which of the following will display the message \"Hello\" in an alert prompt?", answers: ["alert(\"Hello\");","alertBox(\"Hello\");","alertBox(Hello;)","msgAlert(\"Hello\");"], correctAnswer: "alert(\"Hello\");"};
+QuestionObj4 = {Question: "Which prompt will return the minimum of x and y using JavaScript?", answers: ["Math.min(x,y);","min(x,y);","Math.max(x,y);","minimum(x+y);"], correctAnswer: "Math.min(x,y);"};
+QuestionObj5 = {Question: "What will this code return?: Boolean(1<2);", answers: ["True","False","Undefined","Null"], correctAnswer: "True"};
+QuestionObj6 = {Question: "What will this code return?: Boolean(2<1);", answers: ["True","False","Undefined","Null"], correctAnswer: "False"};
+QuestionObj7 = {Question: "What will this code return?: Boolean(1>2);", answers: ["True","False","Undefined","Null"], correctAnswer: "False"};
+QuestionObj8 = {Question: "What will this code return?: Boolean(2>1);", answers: ["True","False","Undefined","Null"], correctAnswer: "True"};
 
+QuestionObj9 = {Question: "How many times will code in this statement loop?: for(i=0; i<4; i++) {}", answers: ["four","five","three","infinite loop"], correctAnswer: "four"};
+QuestionObj10 = {Question: "How many times will code in this statement loop?: for(i=0; i<=4; i++) {}", answers: ["four","five","three","infinite loop"], correctAnswer: "five"};
+QuestionObj11 = {Question: "How many times will code in this statement loop?: for(i=0; i<4; i--) {}", answers: ["four","five","three","infinite loop"], correctAnswer: "infinite loop"};
+//array containing each question object
+objectArray = [QuestionObj1,QuestionObj2,QuestionObj3,QuestionObj4,QuestionObj5,QuestionObj6,QuestionObj7,QuestionObj8,QuestionObj9,QuestionObj10,QuestionObj11];
 
-//overcomplicated varibles, consider re-writing using objects, add more questions
-var questionArray = ["Question one", "Question two", "Question 3", "Question 4",];
-var questionArray2 = ["Question one", "Question two", "Question 3", "Question 4",];
-var answerArray = ["Test Answer One","Test Answer Two", "Test Answer Three", "Test Answer Four"];
-var wrongAnswers1 = ["Q1 Fake1","Q1 Fake2","Q1 Fake3","Q1 Fake4",];
-var wrongAnswers2 = ["Q2 Fake1","Q2 Fake2","Q2 Fake3","Q2 Fake4",];
-var wrongAnswers3 = ["Q3 Fake1","Q3 Fake2","Q3 Fake3","Q3 Fake4",];
-var wrongAnswers4 = ["Q4 Fake1","Q4 Fake2","Q4 Fake3","Q4 Fake4",];
-var wrongAnswersArray = [wrongAnswers1,wrongAnswers2,wrongAnswers3,wrongAnswers4,];
-var inputArray;
 
 // V init function called when page loads
 function init() {
@@ -76,10 +65,12 @@ function init() {
 // start game function is called when start button is clicked.
 function startGame() {
 gameEnd = false;
+runCount = 0;
+shuffleQuestions();
 resetScore();
-
 renderQuiz();
 startTimer();
+
 
 
 }
@@ -92,19 +83,11 @@ function endGame() {
     
     //quiz function is ran when timer has beeen started
     function runQuiz() {
-        generateQuestions();
-        generateAnswers();
         runGame();
+        
     }
     
-    function runGame() { 
-        if (runCount >= randomArray.length) {
-            endGame();
-        }
-        else {  
-        matchQuestions(runCount);
-        }
-    }
+    
 
 //Startinterval timer runs whens start button is pressed
 function startTimer() {
@@ -124,96 +107,48 @@ function startTimer() {
     runQuiz();
 }
 
-
-//generates random array containing each question - make it so questions will not repeat
-function generateQuestions() {
-    // shuffles Question Array  
-    randomArray = shuffleArray(questionArray2);
-   
-}
-
-// randomly generates an array containing  answers matching the random question array
-
-function generateAnswers() {
-
-    for (let i =0; i<questionArray.length; i++) {
+function shuffleQuestions() {
+    console.log("pre shuffle ");
+    console.log(objectArray);
+    //shuffles questions to display in random order
+    shuffleArray(objectArray);
     
-        if (randomArray[i] === questionArray[i]) {
-            randomAnswers[i] = answerArray[i]
-            
-        }
-        else {
-            for (let k =0; k<questionArray.length; k++) {
-                if (randomArray[i] === questionArray[k]) {
-                    randomAnswers[i] = answerArray[k] }
-                    
-                }  
-            }
-        }
-    
-    }
+    console.log("post shuffle ");
+    console.log(objectArray);
 
-
-
-
-function matchQuestions(i) {
     
-    
-    let matchNumber;
-    let array = shuffleArray(simpleArray);
-    questionElement.textContent = randomArray[i];     
-    //outputs correct answer on screen to random button
-    buttonArray[array[0]].textContent = randomAnswers[i];
-    
-    matchNumber = matchNum(randomArray[i]);
-    //outputs wrong answers to remaining buttons
-    buttonArray[array[1]].textContent = wrongAnswersArray[matchNumber][0];    
-    buttonArray[array[2]].textContent = wrongAnswersArray[matchNumber][1];
-    buttonArray[array[3]].textContent = wrongAnswersArray[matchNumber][2];
-    
-    let answerVar = randomAnswers[i];
-    
-    checkAnswer(answerVar);
-
-} 
-
-function checkAnswer(question) {
-    answerCheck = question;
-    
-
-}
-function matchNum(array) {
-   
-    let index;
-    if (array ===questionArray[0]) {
-        
-        index = 0;
-        
-    }
-    
-
-    if (array ===questionArray[1]) {
-        
-        index = 1;
-    }
-    
-    if (array ===questionArray[2]) {
-        
-        index = 2;
-    }
-    
-    if (array ===questionArray[3]) {
-        
-        index = 3;
-    }
-return index    
-
 }
 
 
-
+function runGame() { 
     
-    //shuffles inputted array
+
+    if (runCount >= objectArray.length) {
+        endGame();
+    }
+    else {  
+        runQuestions();
+    }
+}
+
+function runQuestions() {
+    questionElement.textContent = objectArray[runCount].Question
+    runAnswers();
+}
+
+function runAnswers() {
+    let array = [0,1,2,3]
+    shuffleArray(array);
+    
+    buttonArray[array[0]].textContent = objectArray[runCount].answers[0];
+    buttonArray[array[1]].textContent = objectArray[runCount].answers[1];   
+    buttonArray[array[2]].textContent = objectArray[runCount].answers[2];
+    buttonArray[array[3]].textContent = objectArray[runCount].answers[3];
+
+    answerCheck = objectArray[runCount].correctAnswer;
+}
+
+//shuffles inputted array found fisher-yates algorithm when frustrated trying to make my own solution
     function shuffleArray(array) {
         for (let i = array.length -1; i > 0; i--) {
             let randNum = Math.floor(Math.random() * (i+1));
@@ -224,9 +159,6 @@ return index
         }
         return array;
     }
-
-
-    
 
 function scoreFunc() {
     scoreCount++;
@@ -245,19 +177,22 @@ function resetScore() {
     }
 }
 
-
+//renders highscore screen and creates list of highscores
 function highScoreScreen() {
     renderhighScore();
-    
+    //checks if the scorearray has any values
     if (scoreArrayObject.length == 0) {
+        //gets scores from localstorage if array is empty and localstorage has content
+        if (localStorage.getItem("high-scores") != null) {
         scoreArrayObject = JSON.parse(localStorage.getItem("high-scores"));
+        }
     }
     
     //sorts array object so that high scores are listeed first in array
     scoreArrayObject.sort(function(a,b) {
         return b.score - a.score;
     });
-    
+    //creates li elements and appends them to parent element
     for (let i = 0; i<scoreArrayObject.length; i++) {
     createList = document.createElement("li");
     createList.textContent = scoreArrayObject[i].name +" Score: " + scoreArrayObject[i].score;
@@ -266,20 +201,20 @@ function highScoreScreen() {
     } 
 }
 
-
+//clears highscore from localstorage and wipes list of scores
 function clearHighscore() {
     localStorage.clear();
-    scoreListEl.textContent = "";
+    scoreListEl.textContent = ""; //clears score list
+    scoreArrayObject = []; //emptys score array
 
 }
-
+//clears content on screen and brings user back to start page
 function playAgainFunc() {
     highScoretxt.textContent = "";
     scoreListEl.textContent = "";
     renderStartpage();
-    //startGame();
 }
-
+//takes userinput from form and stores name & score to local storage
 function inputScore(event) {
     event.preventDefault();
     let userInput = formElement.value;
@@ -302,6 +237,7 @@ function inputScore(event) {
     highScoreScreen();
 }
 //page rendering - section of functions that control displayed elements
+//displays start page elements & hide non-related elements that may be on screen
 function renderStartpage () {
     //hide page elements except for start button, and highscore page button
     containerEl.setAttribute("style","display:none;");
@@ -313,7 +249,7 @@ function renderStartpage () {
     highScore.setAttribute("style","display:inherit;");
     startButton.setAttribute("style","display:flex;");
 }
-
+    //renders all quiz elements, not including content, hides any non-related elements
 function renderQuiz() {
     //Render quizbox & related elements, hide non-related elements
     containerEl.setAttribute("style","display:inherit;"); //display quizbox
@@ -326,7 +262,7 @@ function renderQuiz() {
     
     
 }
-
+    //renders highscore page, hide any non-related elements that may be on screen
 function renderhighScore() {
     startButton.setAttribute("style","display:none;"); 
     highScore.setAttribute("style","display:none;"); // hides highscore button
@@ -338,6 +274,7 @@ function renderhighScore() {
     highScoretxt.textContent = "Highscores!";
 
 }
+//renders end score screen
 function renderScoreScreen() {
     feedbackElement.textContent ="";
     endgameScreen.setAttribute("style","display:inherit;"); //display end score screen
@@ -362,14 +299,17 @@ highScore.addEventListener("click",highScoreScreen)
 button1.addEventListener("click",function(event) {
     //returns  textcontent of clicked box    
     targetEl = event.target.textContent;
+        //checks if clicked element matches the questions answer
     if (targetEl === answerCheck) {
+        //updates score
         scoreFunc();
-        
+        //updates runcount and continues game
         runCount++;
             runGame();
     }
     else {
-        feedbackElement.textContent = "Wrong!";
+        //if selected element does not match answer, return feedback and subtract from timer
+        feedbackElement.textContent = "Wrong! 👎";
         timerCount--;
     }
     
