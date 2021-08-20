@@ -310,7 +310,7 @@ button1.addEventListener("click",function(event) {
     else {
         //if selected element does not match answer, return feedback and subtract from timer
         feedbackElement.textContent = "Wrong! 👎";
-        timerCount--;
+        timerCount = (timerCount - 5);
     }
     
     });
@@ -327,7 +327,7 @@ button1.addEventListener("click",function(event) {
         }
         else {
             feedbackElement.textContent = "Wrong!";
-            timerCount--;
+            timerCount = (timerCount - 5);
         }
         
     });
@@ -343,7 +343,7 @@ button3.addEventListener("click",function(event) {
     }
         else{
         feedbackElement.textContent = "Wrong!";
-            timerCount--;
+        timerCount = (timerCount - 5);
             }    
         });
 
@@ -357,7 +357,7 @@ button4.addEventListener("click",function(event) {
                 }
                 else {
                     feedbackElement.textContent = "Wrong!";
-                    timerCount--;
+                    timerCount = (timerCount - 5);
                 }    
             });
 
