@@ -48,7 +48,6 @@ QuestionObj5 = {Question: "What will this code return?: Boolean(1<2);", answers:
 QuestionObj6 = {Question: "What will this code return?: Boolean(2<1);", answers: ["True","False","Undefined","Null"], correctAnswer: "False"};
 QuestionObj7 = {Question: "What will this code return?: Boolean(1>2);", answers: ["True","False","Undefined","Null"], correctAnswer: "False"};
 QuestionObj8 = {Question: "What will this code return?: Boolean(2>1);", answers: ["True","False","Undefined","Null"], correctAnswer: "True"};
-
 QuestionObj9 = {Question: "How many times will code in this statement loop?: for(i=0; i<4; i++) {}", answers: ["four","five","three","infinite loop"], correctAnswer: "four"};
 QuestionObj10 = {Question: "How many times will code in this statement loop?: for(i=0; i<=4; i++) {}", answers: ["four","five","three","infinite loop"], correctAnswer: "five"};
 QuestionObj11 = {Question: "How many times will code in this statement loop?: for(i=0; i<4; i--) {}", answers: ["four","five","three","infinite loop"], correctAnswer: "infinite loop"};
@@ -97,7 +96,8 @@ function startTimer() {
     
     timerElement.textContent = "Timer: " + timerCount;
     
-    if (timerCount === 0 ) {
+    
+    if (timerCount <= 0 ) {
         //end game
         clearInterval(timer);
         endGame();
@@ -106,17 +106,11 @@ function startTimer() {
     },1000);
     runQuiz();
 }
-
+// shuffles question array so that quiz randomly presents order of questions
 function shuffleQuestions() {
-    console.log("pre shuffle ");
-    console.log(objectArray);
-    //shuffles questions to display in random order
-    shuffleArray(objectArray);
     
-    console.log("post shuffle ");
-    console.log(objectArray);
+    shuffleArray(objectArray);  
 
-    
 }
 
 
@@ -130,12 +124,12 @@ function runGame() {
         runQuestions();
     }
 }
-
+//generates current question to screen
 function runQuestions() {
     questionElement.textContent = objectArray[runCount].Question
     runAnswers();
 }
-
+// randomly displays answers to current question
 function runAnswers() {
     let array = [0,1,2,3]
     shuffleArray(array);
@@ -159,14 +153,14 @@ function runAnswers() {
         }
         return array;
     }
-
+//ran when user scores, incerements score and display scorecount alongside with feedbacck
 function scoreFunc() {
     scoreCount++;
     scoreElement.textContent = "Score: " +scoreCount;
     feedbackElement.textContent ="Correct! ⭐"
 
 }
-
+//resets score
 function resetScore() {
     if (scoreCount != 0) {
         scoreCount = 0;
@@ -279,6 +273,7 @@ function renderScoreScreen() {
     feedbackElement.textContent ="";
     endgameScreen.setAttribute("style","display:inherit;"); //display end score screen
     containerEl.setAttribute("style","display:none;"); //hide question box
+    timerElement.setAttribute("style","display:none;");
     //hide Wrong/correct, timer, and reset button
 
     }
@@ -358,6 +353,7 @@ button4.addEventListener("click",function(event) {
                 else {
                     feedbackElement.textContent = "Wrong!";
                     timerCount = (timerCount - 5);
+                   
                 }    
             });
 
