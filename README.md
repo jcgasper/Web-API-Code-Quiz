@@ -44,10 +44,7 @@ Jacob Gasper
 
 [Github Repo](https://github.com/jcgasper/Web-API-Code-Quiz "Website Link")
 
-![Screenshot](/Web-API-Code-Quiz/screenshot.png)
 
-![Screenshot2](/Web-API-Code-Quiz/assets/screenshot.png)
-
-![Screenshot3](/screenshot.png)
+![Screenshot](/screenshot.png)
 
 
