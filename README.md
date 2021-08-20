@@ -24,6 +24,11 @@ Skills Learned:
 
 - display questions & answers on screen in random order
 
+To do:
+
+- Update page CSS to give it a more aesthetic experience (currently appearance is very bare-bones and basic)
+- Update screenshot if style gets updated
+
 
 
 Created using: Javascript, HTML, and CSS
@@ -39,4 +44,4 @@ Jacob Gasper
 
 [Github Repo](https://github.com/jcgasper/Web-API-Code-Quiz "Website Link")
 
-![ScreenShot](-INSERTSCREENSHOT- "Optional Title")
+![Alt text](/Web-API-Code-Quiz/screenshot.png?raw=true "Optional Title")
